@@ -19,6 +19,20 @@ def get_album_list(sid, frienduid):
         links = br.links(url_regex=r"wgetalbum.do")
         for i in links:
             outlinks[i.url] = i.text
+        lenf = 0 
+        for i in br.forms():
+            lenf += 1
+        for i in xrange(lenf):
+            k = 0
+            for j in br.forms():
+                br.form = j
+                k += 1
+                if k > i:
+                    break
+            br['password'] = raw_input(u'发现一个加密相册，请输入密码：')
+            br.submit()
+            outlinks[br.geturl()] = br.title()
+            br.back()
         retry = 1
         while retry:
             retry = 0
