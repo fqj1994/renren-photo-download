@@ -5,7 +5,7 @@ from user import get_sid
 from album import get_photo_list
 from album import get_photo_image_url
 from os import path
-from os import mkdir
+from os import makedirs
 import sys
 import locale
 import requests
@@ -32,10 +32,9 @@ while True:
             requser = True
 DIR = raw_input(u'请输入保存目录：')
 
-try:
-    mkdir(DIR)
-except:
-    pass
+
+if not path.exists(DIR):
+    makedirs(DIR)
 
 UID = raw_input(u"请输入好友ID：")
 
@@ -45,7 +44,8 @@ for album in albums:
     print u'> 正在检查相册 %s 中的照片' % (albums[album])
     photos = get_photo_list(album)
     print u'>> 相册 %s 中共有 %d 张照片' % (albums[album], len(photos))
-    mkdir(path.join(DIR, albums[album]))
+    if not path.exists(path.join(DIR, albums[album])):
+        makedirs(path.join(DIR, albums[album]))
     for i in xrange(len(photos)):
         print u'>>> 正在下载第 %d 张照片' % (i + 1)
         url = get_photo_image_url(photos[i])
